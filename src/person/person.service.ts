@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { OtherService } from 'src/other/other.service';
+import { AaaService } from 'src/aaa/aaa.service';
 
 @Injectable()
 export class PersonService {
@@ -9,8 +10,11 @@ export class PersonService {
   @Inject(OtherService)
   private otherService: OtherService;
 
+  @Inject(AaaService)
+  private aaaService: AaaService;
+
   testOther() {
-    return this.otherService.test()
+    return this.otherService.test() + this.aaaService.findAll() + '111';
   }
 
   // create(createPersonDto: CreatePersonDto) {
