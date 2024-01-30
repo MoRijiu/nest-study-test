@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { PersonModule } from './person/person.module';
 import { OtherModule } from './other/other.module';
 import { AaaModule } from './aaa/aaa.module';
+import { APP_GUARD } from '@nestjs/core';
+import { LoginGuard } from './login.guard';
 
 @Module({
   imports: [PersonModule, OtherModule, AaaModule],
@@ -25,7 +27,12 @@ import { AaaModule } from './aaa/aaa.module';
           age: 6
         }
       }
-    }
+    },
+    // {
+    //   // 全局guard
+    //   provide: APP_GUARD,
+    //   useClass: LoginGuard
+    // }
   ],
 })
 export class AppModule {}

@@ -1,10 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFiles, UsePipes, UseFilters, Res } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { TestPipe } from 'src/test.pipe';
+import { TestFilter } from 'src/test.filter';
+import type { Response } from 'express'
 
-@Controller('api/person')
+@Controller({
+  path: 'api/person',
+  // host: ':host.0.0.1'
+})
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
@@ -25,8 +31,12 @@ export class PersonController {
   }
 
   @Get()
-  getIndex() {
-    return this.personService.testOther()
+  getIndex(@Res() res: Response) {
+    res.end(JSON.stringify({
+      age: 18,
+      name: 'haha'
+    }))
+    // return this.personService.testOther()
   }
 
   @Get('find')
@@ -34,6 +44,13 @@ export class PersonController {
     @Query('name') name: string, 
     @Query('age') age: number) {
       return `get name=${name}, age=${age}`
+  }
+
+  @Get('test')
+  @UsePipes(TestPipe)
+  @UseFilters(TestFilter)
+  testException(@Query('num') num: number) {
+    return `hi!${num}`
   }
 
   @Get(':id')
